@@ -1,4 +1,4 @@
-<div id="tabs" ng-controller="Cd1Ctrl" ng-init="init()">
+<div id="tabs" ng-controller="ZNATV01Ctrl" ng-init="init()">
     <div bs-tabs>
         <div data-title="In/Out">
             <div id="io">
@@ -59,6 +59,7 @@
                     <tr>
                         <th style="text-align:left">ID</th>
                         <th>Input</th>
+                        <th>Input Name</th>
                         <th>Operator</th>
                         <th>Value</th>
                         <th>Out</th>
@@ -66,16 +67,20 @@
                         <th>Action</th>
                     </tr>
                     <tr ng-repeat="trig in triggers">
-                        <td>{{trig.id}}</td>
-                        <td>{{inputs[trig.input].name}}</td>
+                        <td>{{trig.id+''}}</td>
+                        <td>{{trig.input}}</td>
+                        <td>{{current.cols[trig.input+'']}}</td>
                         <td>{{oper[trig.oper].name}}</td>
                         <td>{{trig.val}}</td>
                         <td>{{outputs[trig.out].name}}</td>
                         <td>{{dir[trig.out_dir].name}}</td>
                         <td style="width: 1%">
-                            <a href="" ng-click="editTrigger(trig)" class="btn btn-inverse btn-small">
+                            <a ng-click="editTrigger(trig)" class="btn btn-inverse btn-small">
                                 <i class="fa fa-edit"></i>
                                 Edit
+                            </a>
+                            <a ng-click="te_clear(trig)" class="btn btn-danger btn-mini">
+                                <i class="fa fa-remove"></i>
                             </a>
                         </td>
                     </tr>

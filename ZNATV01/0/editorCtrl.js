@@ -7,10 +7,10 @@ function (angular) {
 
   var module = angular.module('grafiz.controllers');
 
-  module.controller('Cd1Ctrl', function($scope, $rootScope, $log, wsSrv, deviceSrv) {
+  module.controller('ZNATV01Ctrl', function($scope, $rootScope, $log, wsSrv, deviceSrv) {
 
     $scope.init = function() {
-      $scope.fr = { interval: 5 };
+      $scope.fr = { interval: 10000 };
       $scope.logs = [];
       var i = 0;
       $scope.outputs = [
@@ -28,8 +28,8 @@ function (angular) {
         {id:'3', name:'>'},
       ];
       $scope.dir = [
-        {id:'0', name:'close'},
-        {id:'1', name:'open'},
+        {id:'0', name:'OFF'},
+        {id:'1', name:'ON'},
       ];
 
       $scope.inputs = [];
@@ -142,7 +142,7 @@ function (angular) {
           $scope.$apply();
         //}else if(cmd===15){//CMD_TRIG
         }else if(cmd===16){//CMD_TRIG_ALL
-          for (i = 0; i < 40; i++) {
+          for (i = 0; i < 20; i++) {
             var b4 = new Uint8Array(message, i*6+3, 6);
             $scope.triggers[i].input = b4[0];
             $scope.triggers[i].oper = b4[1];
@@ -153,7 +153,7 @@ function (angular) {
             byteArray[1]=b4[4];
             byteArray[0]=b4[5];
             var dv1 = new DataView(buf);
-            $scope.triggers[i].val = dv1.getInt16(0);
+            $scope.triggers[i].val = dv1.getInt16(0)/10;
           }
           $scope.$apply();
         //}else if(cmd===17){//CMD_TRAP_ADDR
@@ -205,6 +205,10 @@ function (angular) {
     $scope.te_save = function() {
       $log.log('te_save');
       $scope.dismiss();
+      $scope.te_store();
+    };
+
+    $scope.te_store = function() {
       var buf = new ArrayBuffer(8);
       var byteArray = new Uint8Array(buf,0,6);
       byteArray[0]=15;
@@ -246,6 +250,16 @@ function (angular) {
         src: deviceSrv.getPartialBaseUrl($scope.current)+'/partials/triggerEditor.html',
         scope: $scope.$new(),
       });
+    };
+
+    $scope.te_clear = function(trig) {
+      $scope.current_trig = trig;
+      $scope.current_trig.input = 0;
+      $scope.current_trig.oper = 0;
+      $scope.current_trig.out = 0;
+      $scope.current_trig.out_dir = 0;
+      $scope.current_trig.val = 0;
+      $scope.te_store();
     };
 
   });

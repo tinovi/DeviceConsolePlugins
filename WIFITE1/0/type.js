@@ -1,7 +1,7 @@
 define([
   'angular',
   'lodash',
-  './editorCtrl',
+  './editorCtrl.js',
 ],
 function (angular) {
   'use strict';

@@ -1,5 +1,5 @@
 
-<div class="modal-body gf-box gf-box-no-margin" ng-controller="Cd1Ctrl" title="Edit trigger">
+<div class="modal-body gf-box gf-box-no-margin" ng-controller="ZNATV01Ctrl" title="Edit trigger">
     <div class="gf-box-header">
         <div class="gf-box-title">
             <i class="fa fa-copy"></i>
@@ -19,7 +19,7 @@
                     </li>
                     <li>
                     <li>
-                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.input" ng-options="parseInt(key) as value for (key, value) in current.cols">
+                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.input" ng-options="i as name for (i, name) in current.cols">
                     </select>
                     </li>
                     </li>
@@ -83,8 +83,8 @@
                     <li>
                     <li>
                     <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.out_dir">
-                        <option value="1">Open</option>
-                        <option value="0">Close</option>
+                        <option value="1">ON</option>
+                        <option value="0">OFF</option>
                     </select>
                     </li>
                     </li>

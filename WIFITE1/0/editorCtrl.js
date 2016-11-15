@@ -7,10 +7,10 @@ function (angular) {
 
   var module = angular.module('grafiz.controllers');
 
-  module.controller('Wi1Ctrl', function($scope, $rootScope, $log, wsSrv, deviceSrv) {
+  module.controller('WIFITE1Ctrl', function($scope, $rootScope, $log, wsSrv, deviceSrv) {
 
     $scope.init = function() {
-      $scope.fr = { interval: 5 };
+      $scope.fr = { interval: 10000 };
       $scope.logs = [];
       var i = 0;
       $scope.outputs = [
@@ -27,8 +27,8 @@ function (angular) {
         {id:'3', name:'>'},
       ];
       $scope.dir = [
-        {id:'0', name:'close'},
-        {id:'1', name:'open'},
+        {id:'0', name:'OFF'},
+        {id:'1', name:'ON'},
       ];
 
       $scope.inputs = [];
@@ -93,7 +93,7 @@ function (angular) {
         $log.log('rec: '+ message.byteLength +' cmd:'+cmd);
         var i;
         if(cmd===7){//trap
-          for (i = 0; i < 4; i++) {
+          for (i = 0; i < 8; i++) {
             //var val = new Int16Array(message, 1+i*4, 2);
             $scope.inputs[i].valA = dv.getInt16(3+i*4,true);
             if($scope.inputs[i].valA && $scope.inputs[i].valA!==0) {
@@ -104,7 +104,7 @@ function (angular) {
               $scope.inputs[i].valB=Math.round($scope.inputs[i].valB)/10;
             }
           }
-          var a = dv.getInt8(19);
+          var a = dv.getInt8(35);
           for (i = 0; i < 4; i++) {
             if(((a >> i) & 1)===1){
               $scope.outputs[i].value = true;
@@ -152,7 +152,7 @@ function (angular) {
             byteArray[1]=b4[4];
             byteArray[0]=b4[5];
             var dv1 = new DataView(buf);
-            $scope.triggers[i].val = dv1.getInt16(0);
+            $scope.triggers[i].val = dv1.getInt16(0)/10;
           }
           $scope.$apply();
         //}else if(cmd===17){//CMD_TRAP_ADDR
@@ -164,15 +164,13 @@ function (angular) {
     $scope.outBtnClick = function (outId) {
       $log.log('outBtnClick',$scope.outputs[outId]);
       //  byte[] by = {CMD_TRIG_OUT,(byte)id,b};
-      var byteArray = new Uint8Array(5);
+      var byteArray = new Uint8Array(3);
       byteArray[0] = 18;
-      byteArray[1] = 2; //length of rest
-      byteArray[2] = 0; //length of rest
-      byteArray[3] = outId;
+      byteArray[1] = outId;
       if($scope.outputs[outId].value){
-        byteArray[4] = 1;
+        byteArray[2] = 1;
       }else{
-        byteArray[4] = 0;
+        byteArray[2] = 0;
       }
       $scope.send(byteArray);
     };
@@ -181,12 +179,10 @@ function (angular) {
       $log.log('ie_save');
       $scope.dismiss();
       //byte[] by = {CMD_INT_TYPE,(byte)id,dev.getInputs()[id].getType()};
-      var byteArray = new Uint8Array(5);
+      var byteArray = new Uint8Array(3);
       byteArray[0] = 14;
-      byteArray[1] = 2; //length of rest
-      byteArray[2] = 0; //length of rest
-      byteArray[3] = $scope.current_input.id;
-      byteArray[4] = $scope.current_input.type;
+      byteArray[1] = $scope.current_input.id;
+      byteArray[2] = $scope.current_input.type;
       $scope.send(byteArray);
       $scope.setCol($scope.current_input.id,$scope.current_input.nameA,$scope.current_input.nameB);
     };
@@ -208,17 +204,19 @@ function (angular) {
     $scope.te_save = function() {
       $log.log('te_save');
       $scope.dismiss();
-      var buf = new ArrayBuffer(10);
-      var byteArray = new Uint8Array(buf,0,8);
+      $scope.te_store();
+    };
+
+    $scope.te_store = function() {
+      var buf = new ArrayBuffer(8);
+      var byteArray = new Uint8Array(buf,0,6);
       byteArray[0]=15;
-      byteArray[1] = 7; //length of rest
-      byteArray[2] = 0; //length of rest
-      byteArray[3]=$scope.current_trig.id;
-      byteArray[4]=$scope.current_trig.input;
-      byteArray[5]=$scope.current_trig.oper;
-      byteArray[6]=$scope.current_trig.out;
-      byteArray[7]=$scope.current_trig.out_dir;
-      var val = new Int16Array(buf, 8, 1);
+      byteArray[1]=$scope.current_trig.id;
+      byteArray[2]=$scope.current_trig.input;
+      byteArray[3]=$scope.current_trig.oper;
+      byteArray[4]=$scope.current_trig.out;
+      byteArray[5]=$scope.current_trig.out_dir;
+      var val = new Int16Array(buf, 6, 1);
       var v = Math.round($scope.current_trig.val)*10;
       //$log.log('val',v);
 
@@ -228,11 +226,10 @@ function (angular) {
 
     $scope.updateInterval = function() {
       $log.log('updateInterval'+$scope.fr.interval);
-      var buf = new ArrayBuffer(7);
+      var buf = new ArrayBuffer(5);
       var dv = new DataView(buf);
       dv.setUint8(0,19);
-      dv.setInt16(1,4);
-      dv.setUint32(3,Math.round($scope.fr.interval));
+      dv.setUint32(1,Math.round($scope.fr.interval));
       $scope.send(buf);
     };
 
@@ -248,6 +245,16 @@ function (angular) {
         src: deviceSrv.getPartialBaseUrl($scope.current)+'/partials/triggerEditor.html',
         scope: $scope.$new(),
       });
+    };
+
+    $scope.te_clear = function(trig) {
+      $scope.current_trig = trig;
+      $scope.current_trig.input = 0;
+      $scope.current_trig.oper = 0;
+      $scope.current_trig.out = 0;
+      $scope.current_trig.out_dir = 0;
+      $scope.current_trig.val = 0;
+      $scope.te_store();
     };
 
   });

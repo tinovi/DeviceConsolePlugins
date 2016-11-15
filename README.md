@@ -1,10 +1,10 @@
-This is demo Device Editor Plugins for [www.ziinode.io](www.ziinode.io) IoT cloud service.
+This is demo Device Console Plugins for [www.tinovi.io](www.tinovi.io) IoT cloud service.
 You can create your own plugin for your own Device Type. For uploading you should pack your plugin in zip archive and zip archive root should contain file `type.js` with following content:
 ```
 define([
   'angular',
   'lodash',
-  './editorCtrl',   //include javascript if needed
+  './editorCtrl.js',   //include javascript if needed
 ],
 function (angular) {
   'use strict';
@@ -15,7 +15,7 @@ function (angular) {
     function ZNATV01() {
       this.meta = {
         type: 'ZNATV01',
-        editor: '/partials/editor.html'
+        editor: 'partials/editor.html'
       };
     }
 
@@ -27,3 +27,11 @@ function (angular) {
 ```
 
 replace `ZNATV01` with your own device type Id.
+
+simple file structure for ZIP archive to upload Device Type plugin, please consult as sample for Exizting plugins source in github.
+partials
+    -editor.html
+    -inputEditor.html
+    -triggerEditor.html
+editorCtrl.js
+type.js
