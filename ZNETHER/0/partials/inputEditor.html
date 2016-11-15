@@ -1,0 +1,64 @@
+<div class="modal-body gf-box gf-box-no-margin" ng-controller="ZNETHERCtrl" title="Edit input settings">
+    <div class="gf-box-header">
+        <div class="gf-box-title">
+            <i class="fa fa-copy"></i>
+            Edit input
+        </div>
+
+        <button class="gf-box-header-close-btn" ng-click="dismiss();">
+            <i class="fa fa-remove"></i>
+        </button>
+    </div>
+    <div class="gf-box-body">
+        <form name="editForm">
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        NameA
+                    </li>
+                    <li>
+                        <input type="text" class="input-xlarge tight-form-input" ng-model="current_input.nameA" placeholder="data field name"   ng-pattern="/^[a-zA-Z0-9_]+([-.][a-zA-Z0-9_]+)*$/" ng-maxlength="30" required>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        NameB
+                    </li>
+                    <li>
+                        <input type="text" class="input-xlarge tight-form-input" ng-model="current_input.nameB" placeholder="data field name"   ng-pattern="/^[a-zA-Z0-9_]+([-.][a-zA-Z0-9_]+)*$/" ng-maxlength="30" required>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Sensor type
+                    </li>
+                    <li>
+                        <select class="input-xlarge tight-form-input" ng-model="current_input.type" ng-change="updateIT()" ng-options="item.id as item.name  for item in [{id:0,name:'None'}, {id:2,name:'Digital Themperature DS18B20'}, {id:3,name:'Digital Themperature/Hummudity DTH-11'}, {id:4,name:'Digital Themperature/Hummudity DTH-22'},{id:1,name:'NTC10k Themperature'}, {id:5,name:'Voltage'}, {id:6,name:'Pulse counter'}]">
+                        </select>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <ul class="tight-form-list" ng-if="current_input.type===1 || current_input.type===5 || current_input.type===6">
+                    <li class="tight-form-item" style="width: 80px">
+                       {{refName}}
+                    </li>
+                    <li>
+                        <input type="number" class="input-xlarge tight-form-input" ng-model="current_input.ref" placeholder="Ref" required>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <br>
+            <br>
+            <div class="pull-right">
+                <button class="btn btn-inverse" ng-click="ie_dismiss();">Cancel</button>
+                <button class="btn btn-success" ng-click="ie_save();">Save</button>
+            </div>
+            <br>
+        </form>
+        <br>
+    </div>
+</div>

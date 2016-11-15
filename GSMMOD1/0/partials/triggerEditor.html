@@ -1,0 +1,103 @@
+
+<div class="modal-body gf-box gf-box-no-margin" ng-controller="GSMMOD1Ctrl" title="Edit trigger">
+    <div class="gf-box-header">
+        <div class="gf-box-title">
+            <i class="fa fa-copy"></i>
+            Edit Trigger
+        </div>
+
+        <button class="gf-box-header-close-btn" ng-click="dismiss();">
+            <i class="fa fa-remove"></i>
+        </button>
+    </div>
+    <div class="gf-box-body">
+        <form name="editForm">
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Input
+                    </li>
+                    <li>
+                    <li>
+                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.input" ng-options="i as name for (i, name) in current.cols">
+                    </select>
+                    </li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Operator
+                    </li>
+                    <li>
+                    <li>
+                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.oper">
+                        <option value="1">&#61;</option>
+                        <option value="2">&#60;</option>
+                        <option value="3">&#62;</option>
+                    </select>
+                    </li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Value
+                    </li>
+                    <li>
+                    <li>
+                        <input type="text" class="input-xlarge tight-form-input" ng-model="current_trig.val" placeholder="Trig value" required>
+                    </li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Output
+                    </li>
+                    <li>
+                    <li>
+                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.out">
+                        <option value="0">o0</option>
+                        <option value="1">o1</option>
+                        <option value="2">o2</option>
+                        <option value="3">o3</option>
+                    </select>
+                    </li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tight-form">
+                <ul class="tight-form-list">
+                    <li class="tight-form-item" style="width: 80px">
+                        Output direction result
+                    </li>
+                    <li>
+                    <li>
+                    <select convert-to-number class="input-medium tight-form-input" ng-model="current_trig.out_dir">
+                        <option value="1">ON</option>
+                        <option value="0">OFF</option>
+                    </select>
+                    </li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <br>
+            <br>
+            <div class="pull-right">
+                <button class="btn btn-inverse" ng-click="te_dismiss();">Cancel</button>
+                <button class="btn btn-success" ng-click="te_save();">Save</button>
+            </div>
+            <br>
+        </form>
+    </div>
+</div>
